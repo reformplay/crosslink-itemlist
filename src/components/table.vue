@@ -1,22 +1,56 @@
 <template>
 <div>
-  <v-container
-    class="px-0"
-    fluid
-  >
-    <v-checkbox
-      v-model="lvFlag"
-      :label="`LV1ステータス: ${lvFlag.toString()}`"
-    ></v-checkbox>
-    <v-checkbox
-      v-model="skilllvFlag"
-      :label="`LV1スキル: ${skilllvFlag.toString()}`"
-    ></v-checkbox>
-  </v-container>
+  
+  <v-card flat>
+    <v-container
+        class="px-0"
+        fluid
+      >
+      <v-row>
+        <v-col cols="12" sm="4" md="4">
+          <v-checkbox
+            v-model="lvFlag"
+            :label="`LV1ステータス: ${lvFlag.toString()}`"
+            hide-details
+          ></v-checkbox>
+          <v-checkbox
+            v-model="skilllvFlag"
+            :label="`LV1スキル: ${skilllvFlag.toString()}`"
+            hide-details
+          ></v-checkbox>
+        </v-col>
+        <v-col cols="12" sm="4" md="4">
+
+          <v-checkbox
+            v-model="lvFlag"
+            :label="`LV1ステータス: ${lvFlag.toString()}`"
+            hide-details
+          ></v-checkbox>
+          <v-checkbox
+            v-model="skilllvFlag"
+            :label="`LV1スキル: ${skilllvFlag.toString()}`"
+            hide-details
+          ></v-checkbox>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
+    <v-card-title>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
 <v-data-table
     :headers="headers"
     :items="itemData"
+    item-key="name"
     :items-per-page="25"
+    :search="search"
     class="elevation-1"
   >
     <template v-slot:item.Element="{item}">
@@ -55,6 +89,7 @@
       return {
         lvFlag:false,
         skilllvFlag:false,
+        search:'',
         headers: [
           {
             text: 'アイテム名',
@@ -122,9 +157,7 @@
     },
     created:function(){
       this.itemData = require("../assets/output.json");
-      this.itemData.forEach(item =>{
-        item.totalScore = item.Hp+item.Atk+item.Def+item.Sp+item.Spd;
-      })
+
     },
     methods:{
       getElementColor(element){
