@@ -3,6 +3,9 @@
     <v-card flat>
       <v-card-text>
         <v-container fluid>
+          <p>データについては、タイムラグがあります。場合によっては売り切れ、売却期限終了となっている場合もあります。</p>
+          <p>LastUpdate : {{lastUpdate}}</p>
+          <hr>
           <v-row>
             <v-col cols="12" sm="4" md="4">
               <v-checkbox
@@ -149,6 +152,7 @@
   export default {
     data () {
       return {
+        lastUpdate:"",
         lvFlag:false,
         skilllvFlag:false,
         pagination: {
@@ -242,7 +246,10 @@
       }
     },
     created:function(){
-      this.itemData = require("../assets/output.json");
+      this.axios.get("./output.json").then(response => {
+        this.lastUpdate = response.data.lastUpdate;
+        this.itemData = response.data.itemData;
+      });
     },
     watch:{
       itemData(){
