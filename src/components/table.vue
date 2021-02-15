@@ -26,8 +26,12 @@
 
     <v-data-table
       :headers="headers"
+      :options.sync="options"
       :items="itemData"
-      :items-per-page="25"
+      :footer-props="{
+        'items-per-page-options': [10, 20, 50, 100, 200, 300, 400, 500],
+        showFirstLastPage: true,
+      }"
       class="elevation-1"
     >
       <template v-for="(col, i) in filters" v-slot:[`header.${i}`]="{ header }">
@@ -155,8 +159,11 @@
         lastUpdate:"",
         lvFlag:false,
         skilllvFlag:false,
-        pagination: {
-          sortBy: 'id'
+        options: {
+          page: 1,
+          itemsPerPage: 20,
+          sortBy: ['id'],
+          sortDesc: [true],
         },
         headers: [
           {
