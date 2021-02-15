@@ -2,6 +2,7 @@
   <v-card height="150px">
     <v-footer
       fixed
+      padless
     >
       <v-card
         flat
