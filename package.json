@@ -11,8 +11,8 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
-    "vue-analytics": "^5.22.1",
     "vue-axios": "^3.2.4",
+    "vue-gtag": "^1.11.0",
     "vuetify": "^2.4.4"
   },
   "devDependencies": {
