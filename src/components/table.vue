@@ -9,31 +9,11 @@
                 v-model="lvFlag"
                 :label="`LV1ステータス: ${lvFlag.toString()}`"
               ></v-checkbox>
-              <v-checkbox
-                v-model="skilllvFlag"
-                :label="`LV1スキル: ${skilllvFlag.toString()}`"
-              ></v-checkbox>
             </v-col>
             <v-col cols="12" sm="4" md="4">
               <v-checkbox
-                v-model="lvFlag"
-                :label="`武器: ${lvFlag.toString()}`"
-              ></v-checkbox>
-              <v-checkbox
                 v-model="skilllvFlag"
-                :label="`ピアス: ${skilllvFlag.toString()}`"
-              ></v-checkbox>
-              <v-checkbox
-                v-model="skilllvFlag"
-                :label="`腕輪: ${skilllvFlag.toString()}`"
-              ></v-checkbox>
-              <v-checkbox
-                v-model="skilllvFlag"
-                :label="`バックル: ${skilllvFlag.toString()}`"
-              ></v-checkbox>
-              <v-checkbox
-                v-model="skilllvFlag"
-                :label="`アクセサリー: ${skilllvFlag.toString()}`"
+                :label="`LV1スキル: ${skilllvFlag.toString()}`"
               ></v-checkbox>
             </v-col>
           </v-row>
@@ -190,18 +170,24 @@
             align:'center',
             value: 'Rarity',
             filter: value => {
-            return this.activeFilters.Rarity ? this.activeFilters.Rarity.includes(value) : true;
-          }
+              return this.activeFilters.Rarity ? this.activeFilters.Rarity.includes(value) : true;
+            }
           },
           {
             text: 'Element',
             align:'center',
-            value: 'Element'
+            value: 'Element',
+            filter: value => {
+              return this.activeFilters.Element ? this.activeFilters.Element.includes(value) : true;
+            }
           },
           {
             text: '部位',
             align:'center',
-            value: 'Kind'
+            value: 'Kind',
+            filter: value => {
+              return this.activeFilters.Kind ? this.activeFilters.Kind.includes(value) : true;
+            }
           },
           {
             text: 'Level',
@@ -245,36 +231,29 @@
           },
         ],
         filters:{
-          Rarity:[],
-          //Element:[],
-          //Kind:[]
+          'Rarity':[],
+          Element:[],
+          Kind:[]
 
         },
         activeFilters: {},
         itemData:[],
-        editedIndex: -1,
-        editedItem: {
-          Rarity: '',
-        },
-        defaultItem: {
-          Rarity: '',
-        },
+
       }
     },
     created:function(){
       this.itemData = require("../assets/output.json");
-      this.itemData.forEach(item =>{
-        item.totalScore = item.Hp+item.Atk+item.Def+item.Sp+item.Spd;
-      })
+    },
+    watch:{
+      itemData(){
+        this.initFilters();
+      }
     },
     methods:{
       getElementColor(element){
         if(element === "青") return 'blue'
         else if(element === '赤') return 'red'
         else if(element === '緑') return 'green'
-      },
-      lvdata(){
-        console.log('click')
       },
       getParam(num, item){
         const rare_score = {
@@ -307,61 +286,26 @@
         }
       },
       initFilters() {
-        console.log('test');
-      for (col in this.filters) {
-       console.log(col);
+      for (const col in this.filters) {
+        console.log(col);
         this.filters[col] = this.itemData.map((d) => { return d[col] }).filter(
           (value, index, self) => { return self.indexOf(value) === index }
         )
       }
       // TODO restore previous activeFilters before add/remove item
       this.activeFilters = Object.assign({}, this.filters)
-      /*if (Object.keys(this.activeFilters).length === 0) this.activeFilters = Object.assign({}, this.filters)
-      else {
-        setTimeout(() => {
-          console.log(this.activeFilters)
-          //this.activeFilters = Object.assign({}, this.filters)
-        }, 1)
-      }*/
-    },
 
-    toggleAll (col) {
-      this.activeFilters[col] = this.itemData.map((d) => { return d[col] }).filter(
-        (value, index, self) => { return self.indexOf(value) === index }
-      )
-    },
+      },
 
-    clearAll (col) {
-      this.activeFilters[col] = []
-    },
+      toggleAll (col) {
+        this.activeFilters[col] = this.itemData.map((d) => { return d[col] }).filter(
+          (value, index, self) => { return self.indexOf(value) === index }
+        )
+      },
 
-    editItem (item) {
-      this.editedIndex = this.itemData.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
-
-    deleteItem (item) {
-      const index = this.itemData.indexOf(item)
-      confirm('Are you sure you want to delete this item?') && this.itemData.splice(index, 1)
-    },
-
-    close () {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    save () {
-      if (this.editedIndex > -1) {
-        Object.assign(this.itemData[this.editedIndex], this.editedItem)
-      } else {
-        this.itemData.push(this.editedItem)
-      }
-      this.close()
-    },
+      clearAll (col) {
+        this.activeFilters[col] = []
+      },
     }
   }
 </script>
