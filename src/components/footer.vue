@@ -17,7 +17,7 @@
         <v-divider></v-divider>
 
         <v-card-text class="white--text">
-          投げ銭：IOST ( <strong>reformplay</strong> ) or Linkから購入（紹介料いただけます！）
+          投げ銭：IOST ( <strong>reformplay</strong> ) or Linkから購入（紹介料が入ります！）
         </v-card-text>
       </v-card>
     </v-footer>
