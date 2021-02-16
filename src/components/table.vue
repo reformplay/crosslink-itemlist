@@ -29,10 +29,8 @@
     <v-data-table
       :headers="headers"
       :options.sync="options"
-      :sort-by.sync="sortBy"
-      :sort-desc.sync="sortDesc"
-      @update:options="handleOptionsUpdate"
       :items="itemData"
+      :custom-sort="customSort"
       :footer-props="{
         'items-per-page-options': [10, 20, 50, 100, 200, 300, 400, 500],
         showFirstLastPage: true,
@@ -242,6 +240,16 @@
             value: 'Skills'
           },
           {
+            text: 'IOST',
+            align:'center',
+            value: 'price'
+          },
+          {
+            text: '売り切れ',
+            align:'center',
+            value: 'soldDate',
+          },
+          {
             text: 'Link',
             align:'center',
             value: 'url'
@@ -249,8 +257,8 @@
         ],
         filters:{
           'Rarity':[],
-          Element:[],
-          Kind:[]
+          'Element':[],
+          'Kind':[],
 
         },
         activeFilters: {},
@@ -348,6 +356,17 @@
           this.sortDesc = []
           return
         }
+      },
+      customSort(items, index, isDesc) {
+        console.log(isDesc);
+        items.sort((a, b) => {
+          if (!isDesc) {
+            return a[index] < b[index] ? -1 : 1;
+          } else {
+            return b[index] < a[index] ? -1 : 1;
+          }
+        });
+        return items;
       }
     }
   }
