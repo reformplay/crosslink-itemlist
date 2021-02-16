@@ -242,6 +242,16 @@
             value: 'Skills'
           },
           {
+            text: 'IOST',
+            align:'center',
+            value: 'price'
+          },
+          {
+            text: '売り切れ',
+            align:'center',
+            value: 'soldDate',
+          },
+          {
             text: 'Link',
             align:'center',
             value: 'url'
@@ -249,8 +259,8 @@
         ],
         filters:{
           'Rarity':[],
-          Element:[],
-          Kind:[]
+          'Element':[],
+          'Kind':[],
 
         },
         activeFilters: {},
@@ -348,6 +358,17 @@
           this.sortDesc = []
           return
         }
+      },
+      customSort(items, index, isDesc) {
+        console.log(isDesc);
+        items.sort((a, b) => {
+          if (!isDesc) {
+            return a[index] < b[index] ? -1 : 1;
+          } else {
+            return b[index] < a[index] ? -1 : 1;
+          }
+        });
+        return items;
       }
     }
   }
