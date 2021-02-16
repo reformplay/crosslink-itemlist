@@ -247,11 +247,6 @@
             value: 'price'
           },
           {
-            text: '売り切れ',
-            align:'center',
-            value: 'soldDate',
-          },
-          {
             text: 'Link',
             align:'center',
             value: 'url'
