@@ -29,6 +29,9 @@
     <v-data-table
       :headers="headers"
       :options.sync="options"
+      :sort-by.sync="sortBy"
+      :sort-desc.sync="sortDesc"
+      @update:options="handleOptionsUpdate"
       :items="itemData"
       :footer-props="{
         'items-per-page-options': [10, 20, 50, 100, 200, 300, 400, 500],
@@ -164,9 +167,10 @@
         options: {
           page: 1,
           itemsPerPage: 20,
-          sortBy: ['id'],
-          sortDesc: [true],
+
         },
+        sortBy: ['id'],
+        sortDesc: [true],
         headers: [
           {
             text: 'ID',
@@ -322,6 +326,29 @@
       clearAll (col) {
         this.activeFilters[col] = []
       },
+      handleOptionsUpdate({sortBy, sortDesc}) {
+        if (
+          sortBy[0] === this.sortBy[0] &&
+          sortDesc[0] === this.sortDesc[0]
+        ) return
+
+        if (sortBy[0] && sortDesc[0] === false) {
+          this.sortDesc = [true]
+          return
+        }
+
+        if (sortBy.length === 0 && sortDesc.length === 0) {
+          this.sortBy = [this.sortBy[0]]
+          this.sortDesc = [false]
+          return
+        }
+
+        if (sortBy[0] && sortDesc[0] === true) {
+          this.sortBy = []
+          this.sortDesc = []
+          return
+        }
+      }
     }
   }
 </script>
