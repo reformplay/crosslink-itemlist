@@ -3,9 +3,11 @@
     <v-card flat>
       <v-card-text>
         <v-container fluid>
-          <p>データについては、タイムラグがあります。場合によっては売り切れ、売却期限終了となっている場合もあります。</p>
-          <p>LastUpdate : {{lastUpdate}}</p>
-          <hr>
+          <p>
+            データについては、タイムラグがあります。場合によっては売り切れ、売却期限終了となっている場合もあります。
+          </p>
+          <p>アイテムデータ更新日時 : {{ lastUpdate }}</p>
+          <hr />
           <v-row>
             <v-col cols="12" sm="4" md="4">
               <v-checkbox
