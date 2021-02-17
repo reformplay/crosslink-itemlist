@@ -13,6 +13,7 @@
               <v-checkbox
                 v-model="lvFlag"
                 :label="`LV1ステータス: ${lvFlag.toString()}`"
+                @change="changeParam"
               ></v-checkbox>
             </v-col>
             <v-col cols="12" sm="4" md="4">
@@ -128,21 +129,6 @@
       </template>
       <template v-slot:[`item.Level`]="{ item }">
         <span v-html="lvFlag && item.Level > 1 ? '(1)' : item.Level"></span>
-      </template>
-      <template v-slot:[`item.Hp`]="{ item }">
-        <span v-html="getParam(item.Hp, item)"></span>
-      </template>
-      <template v-slot:[`item.Atk`]="{ item }">
-        <span v-html="getParam(item.Atk, item)"></span>
-      </template>
-      <template v-slot:[`item.Def`]="{ item }">
-        <span v-html="getParam(item.Def, item)"></span>
-      </template>
-      <template v-slot:[`item.Sp`]="{ item }">
-        <span v-html="getParam(item.Sp, item)"></span>
-      </template>
-      <template v-slot:[`item.Spd`]="{ item }">
-        <span v-html="getParam(item.Spd, item)"></span>
       </template>
       <template v-slot:[`item.Skills`]="{ item }">
         <span
@@ -261,6 +247,7 @@
         },
         activeFilters: {},
         itemData:[],
+        parameta:{}
 
       }
     },
@@ -268,6 +255,15 @@
       this.axios.get("./output.json").then(response => {
         this.lastUpdate = response.data.lastUpdate;
         this.itemData = response.data.itemData;
+        this.itemData.map((d)=>{
+          this.parameta[d.id]={
+            'Hp':d.Hp,
+            'Atk':d.Atk,
+            'Def':d.Def,
+            'Sp':d.Sp,
+            'Spd':d.Spd
+          }
+        });
       });
     },
     watch:{
@@ -282,6 +278,15 @@
         else if(element === '緑') return 'green'
       },
       getParam(num, item){
+        let itemRareScore = this.getRareScore(item);
+        if(this.lvFlag){
+          return Math.round(num/item.totalScore * itemRareScore);
+        }
+        else{
+          return num;
+        }
+      },
+      getRareScore(item){
         const rare_score = {
           '1':50,
           '2':100,
@@ -296,12 +301,23 @@
             itemRareScore = item.Kind === '武器'?175:150;
           }
         }
-        if(this.lvFlag){
-          return Math.round(num/item.totalScore * itemRareScore);
-        }
-        else{
-          return num;
-        }
+        return itemRareScore;
+      },
+      changeParam(){
+        this.itemData.map((d)=>{
+          const itemRareScore = this.getRareScore(d);
+
+          if(this.lvFlag){
+            for(let val in this.parameta[d.id]){
+              d[val] = Math.round(this.parameta[d.id][val]/d.totalScore * itemRareScore);
+            }
+          }else{
+            for(let val in this.parameta[d.id]){
+              d[val] = this.parameta[d.id][val];
+            }
+          }
+
+        });
       },
       getSkill(skill){
         if(this.skilllvFlag){
