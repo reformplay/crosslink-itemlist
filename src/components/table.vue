@@ -277,15 +277,6 @@
         else if(element === '赤') return 'red'
         else if(element === '緑') return 'green'
       },
-      getParam(num, item){
-        let itemRareScore = this.getRareScore(item);
-        if(this.lvFlag){
-          return Math.round(num/item.totalScore * itemRareScore);
-        }
-        else{
-          return num;
-        }
-      },
       getRareScore(item){
         const rare_score = {
           '1':50,
