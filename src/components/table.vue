@@ -22,6 +22,16 @@
                 :label="`LV1スキル: ${skilllvFlag.toString()}`"
               ></v-checkbox>
             </v-col>
+            <v-col cols="12" sm="4" md="4">
+              <v-text-field
+                append-icon="mdi-magnify"
+                label="スキル検索"
+                single-line
+                hide-details
+                v-model="skillsearch"
+                @input="filterSearch"
+              ></v-text-field>
+            </v-col>
           </v-row>
         </v-container>
       </v-card-text>
@@ -33,7 +43,7 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       @update:options="handleOptionsUpdate"
-      :items="itemData"
+      :items="filterItemData"
       mobile-breakpoint="0"
       :footer-props="{
         'items-per-page-options': [10, 20, 50, 100, 200, 300, 400, 500],
@@ -246,6 +256,7 @@
 
         },
         activeFilters: {},
+        skillsearch:"",
         itemData:[],
         parameta:{}
 
@@ -269,6 +280,24 @@
     watch:{
       itemData(){
         this.initFilters();
+      }
+    },
+    computed:{
+      filterItemData(){
+        if(this.skillsearch){
+          console.log(this.skillsearch);
+
+          return this.itemData.filter(d =>{
+            const skillres = d.Skills.filter(s =>{
+              return s.Name.indexOf(this.skillsearch)<0?false:true;
+            });
+            console.log(skillres);
+            return skillres.length>0?d:false;
+          });
+        }else{
+          return this.itemData;
+        }
+
       }
     },
     methods:{
@@ -372,7 +401,10 @@
           }
         });
         return items;
-      }
+      },
+      filterSearch(val) {
+        this.filters = this.$MultiFilters.updateFilters(this.filters, {search: val});
+      },
     }
   }
 </script>
