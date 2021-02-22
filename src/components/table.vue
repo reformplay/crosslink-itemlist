@@ -149,7 +149,7 @@
         ></span>
       </template>
       <template v-slot:[`item.url`]="{ item }">
-        <a :href="item.url + '&&referrer=reformplay'" target="_blank">Link</a>
+        <a :href="item.url + '&referrer=reformplay'" target="_blank">Link</a>
       </template>
     </v-data-table>
   </div>
@@ -267,6 +267,8 @@
         this.lastUpdate = response.data.lastUpdate;
         this.itemData = response.data.itemData;
         this.itemData.map((d)=>{
+          console.log(d);
+          d.url = "https://www.tokenlink.io/market-item-detail.html?saleId="+d.id;
           this.parameta[d.id]={
             'Hp':d.Hp,
             'Atk':d.Atk,
