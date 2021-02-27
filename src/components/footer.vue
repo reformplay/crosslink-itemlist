@@ -1,5 +1,5 @@
 <template>
-  <v-card height="150px">
+  <v-card>
     <v-footer padless>
       <v-card flat tile width="100%" class="indigo lighten-1 text-center">
         <v-card-text class="white--text">

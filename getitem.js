@@ -22,18 +22,25 @@ async function getAllData() {
 
 async function getTokenData(allData) {
   const newItem = [];
-  responses = await Promise.all(
-    allData.map(async (item) =>{
-      try{
-        const response = await axios.post("https://api.tokenlink.io/sale/getItemInfo", { "Lang": "ja", "User": "", "Data": { "TokenId": item.SaleData.TokenId } });
-        const getitem = response.data.Data.ItemInfo.Parameters;
-        getitem.id = item.SaleData.Id;
-        getitem.price = item.SaleData.Price;
-        getitem.itemName = item.ItemName;
-        getitem.totalScore = getitem.Hp + getitem.Atk + getitem.Def + getitem.Sp + getitem.Spd;
+  const itemData = {};
 
-        return getitem;
-      }catch(e){}
+  responses = await Promise.all(
+    allData.map(
+      async (item,index) =>{
+        await waitforme(Math.ceil(index/20)*3000+Math.random()*10000); 
+        const tid = item.SaleData.TokenId;
+        try{
+          const response = await axios.post("https://api.tokenlink.io/sale/getItemInfo", { "Lang": "ja", "User": "", "Data": { "TokenId": tid } });
+          const getitem = response.data.Data.ItemInfo.Parameters;
+          getitem.id = item.SaleData.Id;
+          getitem.price = item.SaleData.Price;
+          getitem.itemName = item.ItemName;
+          getitem.totalScore = getitem.Hp + getitem.Atk + getitem.Def + getitem.Sp + getitem.Spd;
+          
+          return getitem;
+        }catch(e){
+          console.log(tid);
+        }
       
     })
   );
@@ -50,6 +57,12 @@ async function getTokenData(allData) {
   return;
 }
 
+function waitforme(milisec) {
+  return new Promise(resolve => {
+    setTimeout(() => { resolve('') }, milisec);
+  })
+} 
+
 async function main() {
   allData = await getAllData();
   getTokenData(allData);
@@ -58,4 +71,3 @@ async function main() {
 cron.schedule('0 0,10,20,30,40,50 * * * *', () => {
   main();
 });
-

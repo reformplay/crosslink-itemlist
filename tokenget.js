@@ -4,14 +4,15 @@ const puppeteer = require('puppeteer');
 
 var cron = require('node-cron');
 
-cron.schedule('0 25,55 * * * *', () => {
-  do_func();
-});
+// cron.schedule('0 25,55 * * * *', () => {
+//   do_func();
+// });
+do_func();
 
 async function do_func(){
   try{
     const jsonObject = JSON.parse(fs.readFileSync('../itemtable/public/output.json', 'utf8'));
-    const startId = jsonObject.lastId;
+    const startId = 0;//jsonObject.lastId;
 
     const newItemData = jsonObject.itemData.filter(item => {
       const sellEndTime = new Date(item.endTime);

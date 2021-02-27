@@ -267,8 +267,14 @@
         this.lastUpdate = response.data.lastUpdate;
         this.itemData = response.data.itemData;
         this.itemData.map((d)=>{
-          console.log(d);
           d.url = "https://www.tokenlink.io/market-item-detail.html?saleId="+d.id;
+          d.Skills.map(s =>{
+            if(s.Name === "ご当地アタックブースト"){
+              var index   = s.Description.indexOf("周辺");
+              var place = s.Description.substring(0, index);
+              s.Name = s.Name.replace('ご当地','ご当地（'+place+')');
+            }
+          });
           this.parameta[d.id]={
             'Hp':d.Hp,
             'Atk':d.Atk,
@@ -342,16 +348,23 @@
         });
       },
       getSkill(skill){
+        let s_name = skill.Name;
         if(this.skilllvFlag){
-          const val = Math.round(skill.Value / ((skill.Level-1)*0.1+1));
-          return skill.Name + "(Lv1):"+val;
+          var val;
+          if(s_name === "クリティカルブースト"){
+            val = parseFloat(skill.Value.replace('%',''));
+            val = Math.round(val * 10 / ((skill.Level-1)*0.1+1)) / 10 + "%";
+          }else{
+            val = Math.round(skill.Value / ((skill.Level-1)*0.1+1));
+          }
+          return s_name + "(Lv1):"+val;
         }else{
-          return skill.Name + "(Lv"+skill.Level+"):"+skill.Value;
+          return s_name + "(Lv"+skill.Level+"):"+skill.Value;
         }
       },
       initFilters() {
       for (const col in this.filters) {
-        console.log(col);
+        //console.log(col);
         this.filters[col] = this.itemData.map((d) => { return d[col] }).filter(
           (value, index, self) => { return self.indexOf(value) === index }
         )
