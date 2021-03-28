@@ -27,7 +27,7 @@ async function getTokenData(allData) {
   responses = await Promise.all(
     allData.map(
       async (item,index) =>{
-        await waitforme(Math.ceil(index/20)*3000+Math.random()*10000); 
+        await waitforme(Math.ceil(index/20)*5000+Math.random()*10000); 
         const tid = item.SaleData.TokenId;
         try{
           const response = await axios.post("https://api.tokenlink.io/sale/getItemInfo", { "Lang": "ja", "User": "", "Data": { "TokenId": tid } });

@@ -329,6 +329,11 @@
             itemRareScore = item.Kind === '武器'?175:150;
           }
         }
+        if(item.Rarity == 5){
+          if(!item.itemName.match(/オーラ|アグニ/)){
+            itemRareScore = item.Kind === '武器'?200:175;
+          }
+        }
         return itemRareScore;
       },
       changeParam(){
